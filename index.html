@@ -5,7 +5,6 @@
 <title>UCPUSA</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-    /* ОБЩЕЕ */
     * {
         margin: 0;
         padding: 0;
@@ -23,20 +22,18 @@
         position: relative;
     }
 
-    /* ======================
-       ЭКРАН ЗАСТАВКИ
-       ======================*/
+    /* ЗАСТАВКА */
     .splash {
         position: absolute;
         height: 100%;
         width: 100%;
-        background: radial-gradient(circle at center, #ad1c43, #1a0000 80%);
+        background: radial-gradient(circle at center, #b51c44, #100000 80%);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 10;
         opacity: 1;
-        animation: splashFade 1.2s ease 1.7s forwards;
+        animation: splashFade 1.2s ease 1.5s forwards;
     }
 
     .splash-logo {
@@ -44,11 +41,11 @@
         font-weight: 800;
         opacity: 0;
         transform: scale(0.4);
-        animation: logoIn 1.4s ease forwards;
+        animation: logoIn 1.5s cubic-bezier(.2,1.6,.35,1) forwards;
     }
 
     @keyframes logoIn {
-        0% { opacity: 0; transform: scale(0.4); }
+        0%   { opacity: 0; transform: scale(0.4); }
         100% { opacity: 1; transform: scale(1); }
     }
 
@@ -57,44 +54,67 @@
         100% { opacity: 0; visibility: hidden; }
     }
 
-    /* ======================
-       КОНТЕЙНЕР СТУПЕНЕЙ
-       ======================*/
+    /* КОНТЕЙНЕР СЛАЙДОВ */
     .slides {
         position: absolute;
-        width: 100%;
+        width: 300%;
         height: 100%;
-        transform: translateX(0);
         display: flex;
-        touch-action: none;
-        transition: transform .45s cubic-bezier(.2, .9, .35, 1);
+        transition: transform .6s cubic-bezier(.25,.9,.35,1);
     }
 
     .slide {
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         flex-shrink: 0;
         padding: 40px 24px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        background: radial-gradient(circle at 70% 20%, #ff6eb0, #2b000c 80%);
+        position: relative;
+
+        /* Живой градиент */ 
+        background: radial-gradient(
+            circle at 70% 25%,
+            #ff6eb0,
+            #32000e 75%
+        );
+        animation: breathe 6s ease-in-out infinite;
     }
 
+    @keyframes breathe {
+        0%   { background-size: 100%; }
+        50%  { background-size: 130%; }
+        100% { background-size: 100%; }
+    }
+
+    /* Тексты */
     .title {
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 700;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
+        transform: translateY(35px);
+        opacity: 0;
+        transition: .6s;
     }
 
     .subtitle {
-        font-size: 13px;
-       .opacity: .9;
+        font-size: 14px;
+        opacity: .9;
         line-height: 1.4;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        transform: translateY(35px);
+        opacity: 0;
+        transition: .6s;
     }
 
-    /* ======= ИНДИКАТОРЫ ======= */
+    .slide.active .title,
+    .slide.active .subtitle {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    /* ИНДИКАТОРЫ */
     .dots {
         display: flex;
         gap: 6px;
@@ -102,7 +122,7 @@
     }
 
     .dot {
-        width: 18px;
+        width: 16px;
         height: 4px;
         border-radius: 2px;
         background: rgba(255,255,255,0.25);
@@ -111,10 +131,15 @@
 
     .dot.active {
         background: white;
-        width: 28px;
+        width: 26px;
     }
 
-    /* ====== КНОПКИ ====== */
+    .dot:hover {
+        background: rgba(255,255,255,0.8);
+        cursor: pointer;
+    }
+
+    /* КНОПКИ */
     .btn-main {
         background: linear-gradient(90deg, #ff416c, #ff0033);
         color: white;
@@ -125,6 +150,11 @@
         width: 100%;
         border: none;
         margin-bottom: 16px;
+        transition: .2s;
+    }
+
+    .btn-main:active {
+        transform: scale(.97);
     }
 
     .btn-skip {
@@ -133,6 +163,11 @@
         color: white;
         font-size: 14px;
         opacity: 0.7;
+        transition: .2s;
+    }
+
+    .btn-skip:active {
+        transform: scale(.97);
     }
 
     .bottom-label {
@@ -146,23 +181,21 @@
 </head>
 <body>
 
-<!-- ЗАСТАВКА -->
 <div class="splash">
     <div class="splash-logo">UCPUSA</div>
 </div>
 
-<!-- КОНТЕНТ СЛАЙДОВ -->
 <div class="slides" id="slides">
 
-    <!-- СТРАНИЦА 1 -->
-    <div class="slide">
+    <!-- 1 -->
+    <div class="slide active">
         <div class="title">Коммунистическая партия<br>UCPUSA</div>
         <div class="subtitle">Начинай политическую жизнь<br>в нашем Штате с нас.</div>
 
         <div class="dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+            <div class="dot active" onclick="goTo(0)"></div>
+            <div class="dot" onclick="goTo(1)"></div>
+            <div class="dot" onclick="goTo(2)"></div>
         </div>
 
         <button class="btn-main" onclick="next()">Далее</button>
@@ -171,15 +204,15 @@
         <div class="bottom-label">UCPUSA</div>
     </div>
 
-    <!-- СТРАНИЦА 2 -->
+    <!-- 2 -->
     <div class="slide">
-        <div class="title">Голос В Народы</div>
-        <div class="subtitle">Стань частью красного движения<br>и помоги строить будущее.</div>
+        <div class="title">Голос в народа</div>
+        <div class="subtitle">Стань частью движения<br>и помоги строить новое будущее.</div>
 
         <div class="dots">
-            <div class="dot"></div>
-            <div class="dot active"></div>
-            <div class="dot"></div>
+            <div class="dot" onclick="goTo(0)"></div>
+            <div class="dot active" onclick="goTo(1)"></div>
+            <div class="dot" onclick="goTo(2)"></div>
         </div>
 
         <button class="btn-main" onclick="next()">Далее</button>
@@ -188,15 +221,15 @@
         <div class="bottom-label">UCPUSA</div>
     </div>
 
-    <!-- СТРАНИЦА 3 -->
+    <!-- 3 -->
     <div class="slide">
         <div class="title">К единству и свободе!</div>
-        <div class="subtitle">Вступай в UCPUSA и прокладывай<br>новый путь вместе с нами.</div>
+        <div class="subtitle">Вступай и прокладывай<br>путь вместе с нами.</div>
 
         <div class="dots">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot active"></div>
+            <div class="dot" onclick="goTo(0)"></div>
+            <div class="dot" onclick="goTo(1)"></div>
+            <div class="dot active" onclick="goTo(2)"></div>
         </div>
 
         <button class="btn-main" onclick="finish()">Начать</button>
@@ -208,29 +241,44 @@
 </div>
 
 <script>
-    // CURRENT PAGE
-    let page = 0;
+    let current = 0;
     const slides = document.getElementById("slides");
-    const total = 3;
+    const list = document.querySelectorAll(".slide");
+    const total = list.length;
 
-    function updatePosition() {
-        slides.style.transform = `translateX(-${page * 100}%)`;
+    function update() {
+        slides.style.transform = `translateX(-${current * 100}vw)`;
+
+        list.forEach((s, i) => {
+            if (i === current) s.classList.add("active");
+            else s.classList.remove("active");
+
+            document.querySelectorAll(".dot").forEach((d, j) => {
+                if (Math.floor(j / total) === 0) return; 
+            });
+        });
+
+        document.querySelectorAll(".dots").forEach((group, i) => {
+            const dots = group.querySelectorAll(".dot");
+            dots.forEach((d, j) => d.classList.toggle("active", j === current));
+        });
     }
 
     function next() {
-        if (page < total - 1) {
-            page++;
-            updatePosition();
-        } else {
-            finish();
-        }
+        current = Math.min(current + 1, total - 1);
+        update();
+    }
+
+    function goTo(x) {
+        current = x;
+        update();
     }
 
     function finish() {
         Telegram.WebApp.sendData(JSON.stringify({ action: "finished" }));
     }
 
-    /* СВАЙПЫ =================================== */
+    /* Свайпы */
     let startX = 0;
 
     slides.addEventListener("touchstart", e => {
@@ -239,11 +287,9 @@
 
     slides.addEventListener("touchend", e => {
         let dx = e.changedTouches[0].clientX - startX;
-
-        if (dx < -60 && page < total - 1) { page++; }
-        if (dx > 60 && page > 0) { page--; }
-
-        updatePosition();
+        if (dx < -60 && current < total - 1) current++;
+        if (dx > 60 && current > 0) current--;
+        update();
     });
 </script>
 
