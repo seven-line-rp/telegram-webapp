@@ -1,218 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>UCPUSA</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-    body, html {
-        width: 100%;
-        height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, "Inter", Roboto, sans-serif;
-        overflow: hidden;
-        background: #2b000c;
-        color: white;
-    }
-    /* Общий контейнер */
-    .screen {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transition: opacity 0.5s ease;
-    }
-    .hidden { opacity: 0; pointer-events: none; }
-
-    /* Стартовый экран */
-    #startScreen {
-        background: radial-gradient(circle at 50% 30%, #ff6eb0, #2b000c 90%);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-    }
-    #startScreen h1 {
-        font-size: 42px;
-        font-weight: 800;
-        margin-bottom: 20px;
-        animation: fadeInDown 1s ease forwards;
-        opacity: 0;
-    }
-    #startScreen p {
-        font-size: 18px;
-        margin-bottom: 40px;
-        opacity: 0;
-        animation: fadeInUp 1s ease forwards;
-        animation-delay: 0.5s;
-    }
-    .btn-start {
-        background: linear-gradient(90deg, #ff416c, #ff0033);
-        color: white;
-        border: none;
-        padding: 16px 40px;
-        border-radius: 16px;
-        font-size: 18px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: 0.25s;
-    }
-    .btn-start:active { transform: scale(0.97); }
-
-    @keyframes fadeInDown {
-        0% { opacity: 0; transform: translateY(-30px);}
-        100% { opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeInUp {
-        0% { opacity: 0; transform: translateY(30px);}
-        100% { opacity: 1; transform: translateY(0);}
-    }
-
-    /* Страницы информации */
-    #pagesScreen {
-        background: radial-gradient(circle at 70% 20%, #ff6eb0, #2b000c 75%);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 40px 26px;
-    }
-    .content { max-width: 400px; margin-bottom: 40px; }
-    .title { font-size: 22px; font-weight: 700; margin-bottom: 8px; opacity: 0; transform: translateY(20px); transition: all 0.7s cubic-bezier(.25,.9,.35,1);}
-    .subtitle { font-size: 14px; line-height: 1.5; opacity: 0; transform: translateY(20px); transition: all 0.7s cubic-bezier(.25,.9,.35,1);}
-    .active { opacity: 1; transform: translateY(0);}
-    .dots { display: flex; gap: 6px; margin: 24px 0; }
-    .dot { width: 16px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.25); transition: .25s; }
-    .dot.active { background: white; width: 26px; }
-    .dot:hover { cursor: pointer; background: rgba(255,255,255,0.6); }
-    .btn-main, .btn-skip { width: 100%; border-radius: 14px; font-size: 15px; font-weight: 600; padding: 14px; margin-bottom: 16px; transition: 0.25s; border: none; }
-    .btn-main { background: linear-gradient(90deg, #ff416c, #ff0033); color: white; }
-    .btn-main:active { transform: scale(0.97); }
-    .btn-skip { background: transparent; color: white; opacity: 0.7; }
-    .btn-skip:active { transform: scale(0.97); }
-    .bottom-label { text-align: center; font-size: 11px; opacity: 0.35; margin-top: 18px; }
-
-    /* Профиль */
-    #profileScreen {
-        background: radial-gradient(circle at 50% 50%, #ff6eb0, #2b000c);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 40px 20px;
-        text-align: center;
-    }
-    #profileScreen h2 { font-size: 28px; font-weight: 700; margin-bottom: 20px; }
-    #profileScreen p { font-size: 16px; line-height: 1.5; margin-bottom: 20px; }
-    .profile-card {
-        background: rgba(255,255,255,0.1);
-        padding: 20px;
-        border-radius: 20px;
-        margin: 10px 0;
-        width: 100%;
-        max-width: 350px;
-        transition: 0.3s;
-    }
-    .profile-card:hover { background: rgba(255,255,255,0.2); }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UCPUSA — WebApp</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">UCPUSA</div>
+      <div id="userShort" class="user-short">—</div>
+    </header>
 
-<!-- Стартовый экран -->
-<div id="startScreen" class="screen">
-    <h1>UCPUSA</h1>
-    <p>Добро пожаловать! Начни свой путь в политике с нами.</p>
-    <button class="btn-start" onclick="startPages()">Начать</button>
-</div>
+    <main class="container">
+      <section id="home" class="screen">
+        <h1>Добро пожаловать, товарищ!</h1>
+        <p class="lead">Перенёс механику из твоего VK-бота в Telegram WebApp.</p>
+        <div class="actions">
+          <button id="btnProfile" class="btn">Профиль</button>
+          <button id="btnEconomy" class="btn">Экономика</button>
+          <button id="btnCasino" class="btn">Казино</button>
+          <button id="btnArmy" class="btn">Война</button>
+        </div>
+      </section>
 
-<!-- Страницы -->
-<div id="pagesScreen" class="screen hidden">
-    <div class="content">
-        <div class="title" id="title"></div>
-        <div class="subtitle" id="subtitle"></div>
-    </div>
-    <div class="dots">
-        <div class="dot" onclick="go(0)"></div>
-        <div class="dot" onclick="go(1)"></div>
-        <div class="dot" onclick="go(2)"></div>
-    </div>
-    <button class="btn-main" onclick="next()">Далее</button>
-    <button class="btn-skip" onclick="finish()">Пропустить</button>
-    <div class="bottom-label">UCPUSA</div>
-</div>
+      <section id="profile" class="screen hidden">
+        <div class="card">
+          <h2 id="profileName">Профиль</h2>
+          <pre id="profileData"></pre>
+          <div class="card-actions">
+            <button id="btnBackFromProfile" class="btn outline">Назад</button>
+          </div>
+        </div>
+      </section>
 
-<!-- Профиль -->
-<div id="profileScreen" class="screen hidden">
-    <h2>Твой профиль</h2>
-    <p>Добро пожаловать в личный кабинет. Здесь ты можешь следить за событиями, вступать в группы и узнавать новости.</p>
-    <div class="profile-card">Имя: Иван</div>
-    <div class="profile-card">Ранг: Член партии</div>
-    <div class="profile-card">Активность: Высокая</div>
-</div>
+      <section id="economy" class="screen hidden">
+        <div class="card">
+          <h2>Экономика</h2>
+          <div id="econData"></div>
+          <div class="row">
+            <button id="btnBuildFactory" class="btn">Построить фабрику (50)</button>
+            <button id="btnCollect" class="btn">Собрать доход</button>
+          </div>
+          <div class="card-actions">
+            <button id="btnBackFromEconomy" class="btn outline">Назад</button>
+          </div>
+        </div>
+      </section>
 
-<script>
-let startX = 0;
+      <section id="casino" class="screen hidden">
+        <div class="card">
+          <h2>Казино</h2>
+          <div id="casinoBalance"></div>
+          <div class="row">
+            <input id="casinoBet" type="number" min="10" placeholder="Ставка" />
+            <button id="btnRoulette" class="btn small">Рулетка</button>
+            <button id="btnDice" class="btn small">Кости</button>
+            <button id="btnLottery" class="btn small">Лотерея</button>
+          </div>
+          <pre id="casinoLog"></pre>
+          <div class="card-actions">
+            <button id="btnBackFromCasino" class="btn outline">Назад</button>
+          </div>
+        </div>
+      </section>
 
-const pages = [
-    { title: "Коммунистическая партия UCPUSA", subtitle: "Начинай политическую жизнь в нашем штате с нами." },
-    { title: "Голос народа", subtitle: "Стань частью движения и помоги строить будущее." },
-    { title: "К единству и свободе!", subtitle: "Вступай и меняй мир вместе с нами." }
-];
+    </main>
 
-let index = 0;
-const titleEl = document.getElementById("title");
-const subtitleEl = document.getElementById("subtitle");
-const dots = document.querySelectorAll(".dot");
+    <footer class="footer">UCPUSA • WebApp</footer>
+  </div>
 
-function showScreen(screenId) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
-    document.getElementById(screenId).classList.remove("hidden");
-}
-
-function animateText(nextIndex) {
-    titleEl.classList.remove("active");
-    subtitleEl.classList.remove("active");
-    setTimeout(() => {
-        titleEl.innerText = pages[nextIndex].title;
-        subtitleEl.innerText = pages[nextIndex].subtitle;
-        titleEl.classList.add("active");
-        subtitleEl.classList.add("active");
-    }, 200);
-}
-
-function updateDots() { dots.forEach((d,i)=>d.classList.toggle("active",i===index)); }
-function go(i) { index=i; animateText(i); updateDots(); }
-function next() {
-    if(index<pages.length-1){ index++; animateText(index); updateDots(); }
-    else finish();
-}
-
-function startPages() {
-    showScreen("pagesScreen");
-    animateText(0);
-    dots[0].classList.add("active");
-}
-
-function finish() {
-    showScreen("profileScreen");
-    Telegram.WebApp.sendData(JSON.stringify({action:"finished"}));
-}
-
-// Свайпы
-document.body.addEventListener("touchstart", e=>startX=e.touches[0].clientX);
-document.body.addEventListener("touchend", e=>{
-    let dx = e.changedTouches[0].clientX - startX;
-    if(dx<-50 && index<pages.length-1) next();
-    if(dx>50 && index>0){ index--; go(index); }
-});
-</script>
-
+  <script src="./app.js"></script>
 </body>
 </html>
