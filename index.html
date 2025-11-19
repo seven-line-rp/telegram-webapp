@@ -16,109 +16,63 @@
         width: 100vw;
         height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, "Inter", Roboto, sans-serif;
-        background: #000;
-        overflow: hidden;
-        color: white;
-        position: relative;
-    }
-
-    /* ЗАСТАВКА */
-    .splash {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background: radial-gradient(circle at center, #b51c44, #100000 80%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        opacity: 1;
-        animation: splashFade 1.2s ease 1.5s forwards;
-    }
-
-    .splash-logo {
-        font-size: 46px;
-        font-weight: 800;
-        opacity: 0;
-        transform: scale(0.4);
-        animation: logoIn 1.5s cubic-bezier(.2,1.6,.35,1) forwards;
-    }
-
-    @keyframes logoIn {
-        0%   { opacity: 0; transform: scale(0.4); }
-        100% { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes splashFade {
-        0% { opacity: 1; }
-        100% { opacity: 0; visibility: hidden; }
-    }
-
-    /* КОНТЕЙНЕР СЛАЙДОВ */
-    .slides {
-        position: absolute;
-        width: 300%;
-        height: 100%;
-        display: flex;
-        transition: transform .6s cubic-bezier(.25,.9,.35,1);
-    }
-
-    .slide {
-        width: 100vw;
-        height: 100vh;
-        flex-shrink: 0;
-        padding: 40px 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        position: relative;
-
-        /* Живой градиент */ 
         background: radial-gradient(
-            circle at 70% 25%,
+            circle at 70% 20%,
             #ff6eb0,
-            #32000e 75%
+            #2b000c 75%
         );
         animation: breathe 6s ease-in-out infinite;
+        overflow: hidden;
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: column;
+        padding: 40px 26px;
+        position: relative;
     }
 
     @keyframes breathe {
-        0%   { background-size: 100%; }
-        50%  { background-size: 130%; }
+        0% { background-size: 100%; }
+        50% { background-size: 130%; }
         100% { background-size: 100%; }
     }
 
-    /* Тексты */
+    /* Экран */
+    .content {
+        position: relative;
+        min-height: 240px;
+    }
+
+    .title, .subtitle {
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: .7s cubic-bezier(.25,.9,.35,1);
+    }
+
+    .title.active, .subtitle.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .title {
         font-size: 22px;
         font-weight: 700;
-        margin-bottom: 8px;
-        transform: translateY(35px);
-        opacity: 0;
-        transition: .6s;
     }
 
     .subtitle {
+        margin-top: 8px;
         font-size: 14px;
         opacity: .9;
         line-height: 1.4;
-        margin-bottom: 32px;
-        transform: translateY(35px);
-        opacity: 0;
-        transition: .6s;
     }
 
-    .slide.active .title,
-    .slide.active .subtitle {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    /* ИНДИКАТОРЫ */
+    /* Индикаторы */
     .dots {
         display: flex;
         gap: 6px;
-        margin-bottom: 26px;
+        margin: 24px 0;
     }
 
     .dot {
@@ -135,11 +89,11 @@
     }
 
     .dot:hover {
-        background: rgba(255,255,255,0.8);
         cursor: pointer;
+        background: rgba(255,255,255,0.6);
     }
 
-    /* КНОПКИ */
+    /* Кнопки */
     .btn-main {
         background: linear-gradient(90deg, #ff416c, #ff0033);
         color: white;
@@ -150,7 +104,7 @@
         width: 100%;
         border: none;
         margin-bottom: 16px;
-        transition: .2s;
+        transition: .25s;
     }
 
     .btn-main:active {
@@ -161,9 +115,9 @@
         background: transparent;
         border: none;
         color: white;
-        font-size: 14px;
-        opacity: 0.7;
-        transition: .2s;
+        opacity: .7;
+        font-size: 15px;
+        transition: .25s;
     }
 
     .btn-skip:active {
@@ -172,125 +126,121 @@
 
     .bottom-label {
         text-align: center;
-        margin-top: 14px;
+        margin-top: 18px;
         font-size: 11px;
-        opacity: 0.4;
-        margin-bottom: 20px;
+        opacity: 0.35;
     }
+
 </style>
 </head>
 <body>
 
-<div class="splash">
-    <div class="splash-logo">UCPUSA</div>
+<div class="content">
+    <!-- Заголовки и подзаголовки будут меняться -->
+    <div class="title" id="title"></div>
+    <div class="subtitle" id="subtitle"></div>
 </div>
 
-<div class="slides" id="slides">
-
-    <!-- 1 -->
-    <div class="slide active">
-        <div class="title">Коммунистическая партия<br>UCPUSA</div>
-        <div class="subtitle">Начинай политическую жизнь<br>в нашем Штате с нас.</div>
-
-        <div class="dots">
-            <div class="dot active" onclick="goTo(0)"></div>
-            <div class="dot" onclick="goTo(1)"></div>
-            <div class="dot" onclick="goTo(2)"></div>
-        </div>
-
-        <button class="btn-main" onclick="next()">Далее</button>
-        <button class="btn-skip" onclick="finish()">Пропустить</button>
-
-        <div class="bottom-label">UCPUSA</div>
-    </div>
-
-    <!-- 2 -->
-    <div class="slide">
-        <div class="title">Голос в народа</div>
-        <div class="subtitle">Стань частью движения<br>и помоги строить новое будущее.</div>
-
-        <div class="dots">
-            <div class="dot" onclick="goTo(0)"></div>
-            <div class="dot active" onclick="goTo(1)"></div>
-            <div class="dot" onclick="goTo(2)"></div>
-        </div>
-
-        <button class="btn-main" onclick="next()">Далее</button>
-        <button class="btn-skip" onclick="finish()">Пропустить</button>
-
-        <div class="bottom-label">UCPUSA</div>
-    </div>
-
-    <!-- 3 -->
-    <div class="slide">
-        <div class="title">К единству и свободе!</div>
-        <div class="subtitle">Вступай и прокладывай<br>путь вместе с нами.</div>
-
-        <div class="dots">
-            <div class="dot" onclick="goTo(0)"></div>
-            <div class="dot" onclick="goTo(1)"></div>
-            <div class="dot active" onclick="goTo(2)"></div>
-        </div>
-
-        <button class="btn-main" onclick="finish()">Начать</button>
-        <button class="btn-skip" onclick="finish()">Пропустить</button>
-
-        <div class="bottom-label">UCPUSA</div>
-    </div>
-
+<!-- Индикаторы -->
+<div class="dots">
+    <div class="dot" onclick="go(0)"></div>
+    <div class="dot" onclick="go(1)"></div>
+    <div class="dot" onclick="go(2)"></div>
 </div>
+
+<!-- Кнопки -->
+<button class="btn-main" onclick="next()">Далее</button>
+<button class="btn-skip" onclick="finish()">Пропустить</button>
+
+<div class="bottom-label">UCPUSA</div>
 
 <script>
-    let current = 0;
-    const slides = document.getElementById("slides");
-    const list = document.querySelectorAll(".slide");
-    const total = list.length;
+    const pages = [
+        {
+            title: "Коммунистическая партия UCPUSA",
+            subtitle: "Начинай политическую жизнь в нашем Штате с нас."
+        },
+        {
+            title: "Голос народа",
+            subtitle: "Стань частью движения и помоги строить будущее."
+        },
+        {
+            title: "К единству и свободе!",
+            subtitle: "Вступай и меняй мир вместе с нами."
+        }
+    ];
 
-    function update() {
-        slides.style.transform = `translateX(-${current * 100}vw)`;
+    let index = 0;
 
-        list.forEach((s, i) => {
-            if (i === current) s.classList.add("active");
-            else s.classList.remove("active");
+    const titleEl = document.getElementById("title");
+    const subtitleEl = document.getElementById("subtitle");
+    const dots = document.querySelectorAll(".dot");
 
-            document.querySelectorAll(".dot").forEach((d, j) => {
-                if (Math.floor(j / total) === 0) return; 
-            });
-        });
+    function animateText(nextIndex) {
+        // старые элементы скрываем
+        titleEl.classList.remove("active");
+        subtitleEl.classList.remove("active");
 
-        document.querySelectorAll(".dots").forEach((group, i) => {
-            const dots = group.querySelectorAll(".dot");
-            dots.forEach((d, j) => d.classList.toggle("active", j === current));
-        });
+        setTimeout(() => {
+            titleEl.innerHTML = pages[nextIndex].title;
+            subtitleEl.innerHTML = pages[nextIndex].subtitle;
+
+            titleEl.classList.add("active");
+            subtitleEl.classList.add("active");
+        }, 200);
+    }
+
+    function updateDots() {
+        dots.forEach((d, i) => {
+            d.classList.toggle("active", i === index);
+        })
+    }
+
+    function go(i) {
+        index = i;
+        animateText(i);
+        updateDots();
     }
 
     function next() {
-        current = Math.min(current + 1, total - 1);
-        update();
-    }
-
-    function goTo(x) {
-        current = x;
-        update();
+        if (index < pages.length - 1) {
+            index++;
+            animateText(index);
+            updateDots();
+        } else {
+            finish();
+        }
     }
 
     function finish() {
-        Telegram.WebApp.sendData(JSON.stringify({ action: "finished" }));
+        Telegram.WebApp.sendData(
+            JSON.stringify({ action: "finished" })
+        );
     }
 
     /* Свайпы */
     let startX = 0;
 
-    slides.addEventListener("touchstart", e => {
+    document.body.addEventListener("touchstart", e => {
         startX = e.touches[0].clientX;
     });
 
-    slides.addEventListener("touchend", e => {
+    document.body.addEventListener("touchend", e => {
         let dx = e.changedTouches[0].clientX - startX;
-        if (dx < -60 && current < total - 1) current++;
-        if (dx > 60 && current > 0) current--;
-        update();
+
+        if (dx < -50 && index < pages.length - 1) {
+            next();
+        }
+        if (dx > 50 && index > 0) {
+            index--;
+            go(index);
+        }
     });
+
+    // Первое появление
+    animateText(0);
+    dots[0].classList.add("active");
+
 </script>
 
 </body>
