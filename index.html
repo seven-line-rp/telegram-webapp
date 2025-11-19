@@ -16,19 +16,15 @@
         width: 100vw;
         height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, "Inter", Roboto, sans-serif;
-        background: radial-gradient(
-            circle at 70% 20%,
-            #ff6eb0,
-            #2b000c 75%
-        );
+        background: radial-gradient(circle at 70% 20%, #ff6eb0, #2b000c 75%);
         animation: breathe 6s ease-in-out infinite;
         overflow: hidden;
         color: white;
         display: flex;
-        justify-content: flex-end;
         flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
         padding: 40px 26px;
-        position: relative;
     }
 
     @keyframes breathe {
@@ -37,38 +33,33 @@
         100% { background-size: 100%; }
     }
 
-    /* Экран */
     .content {
-        position: relative;
-        min-height: 240px;
-    }
-
-    .title, .subtitle {
-        position: absolute;
-        left: 0;
-        opacity: 0;
-        transform: translateY(40px);
-        transition: .7s cubic-bezier(.25,.9,.35,1);
-    }
-
-    .title.active, .subtitle.active {
-        opacity: 1;
-        transform: translateY(0);
+        max-width: 400px;
+        margin-bottom: 40px;
     }
 
     .title {
         font-size: 22px;
         font-weight: 700;
+        margin-bottom: 8px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.7s cubic-bezier(.25,.9,.35,1);
     }
 
     .subtitle {
-        margin-top: 8px;
         font-size: 14px;
-        opacity: .9;
-        line-height: 1.4;
+        line-height: 1.5;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.7s cubic-bezier(.25,.9,.35,1);
     }
 
-    /* Индикаторы */
+    .active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .dots {
         display: flex;
         gap: 6px;
@@ -93,7 +84,6 @@
         background: rgba(255,255,255,0.6);
     }
 
-    /* Кнопки */
     .btn-main {
         background: linear-gradient(90deg, #ff416c, #ff0033);
         color: white;
@@ -129,118 +119,96 @@
         margin-top: 18px;
         font-size: 11px;
         opacity: 0.35;
+        width: 100%;
     }
-
 </style>
 </head>
 <body>
 
 <div class="content">
-    <!-- Заголовки и подзаголовки будут меняться -->
     <div class="title" id="title"></div>
     <div class="subtitle" id="subtitle"></div>
 </div>
 
-<!-- Индикаторы -->
 <div class="dots">
     <div class="dot" onclick="go(0)"></div>
     <div class="dot" onclick="go(1)"></div>
     <div class="dot" onclick="go(2)"></div>
 </div>
 
-<!-- Кнопки -->
 <button class="btn-main" onclick="next()">Далее</button>
 <button class="btn-skip" onclick="finish()">Пропустить</button>
 
 <div class="bottom-label">UCPUSA</div>
 
 <script>
-    const pages = [
-        {
-            title: "Коммунистическая партия UCPUSA",
-            subtitle: "Начинай политическую жизнь в нашем Штате с нас."
-        },
-        {
-            title: "Голос народа",
-            subtitle: "Стань частью движения и помоги строить будущее."
-        },
-        {
-            title: "К единству и свободе!",
-            subtitle: "Вступай и меняй мир вместе с нами."
-        }
-    ];
-
-    let index = 0;
-
-    const titleEl = document.getElementById("title");
-    const subtitleEl = document.getElementById("subtitle");
-    const dots = document.querySelectorAll(".dot");
-
-    function animateText(nextIndex) {
-        // старые элементы скрываем
-        titleEl.classList.remove("active");
-        subtitleEl.classList.remove("active");
-
-        setTimeout(() => {
-            titleEl.innerHTML = pages[nextIndex].title;
-            subtitleEl.innerHTML = pages[nextIndex].subtitle;
-
-            titleEl.classList.add("active");
-            subtitleEl.classList.add("active");
-        }, 200);
+const pages = [
+    {
+        title: "Коммунистическая партия UCPUSA",
+        subtitle: "Начинай политическую жизнь в нашем штате с нами."
+    },
+    {
+        title: "Голос народа",
+        subtitle: "Стань частью движения и помоги строить будущее."
+    },
+    {
+        title: "К единству и свободе!",
+        subtitle: "Вступай и меняй мир вместе с нами."
     }
+];
 
-    function updateDots() {
-        dots.forEach((d, i) => {
-            d.classList.toggle("active", i === index);
-        })
-    }
+let index = 0;
+const titleEl = document.getElementById("title");
+const subtitleEl = document.getElementById("subtitle");
+const dots = document.querySelectorAll(".dot");
 
-    function go(i) {
-        index = i;
-        animateText(i);
+function animateText(nextIndex) {
+    titleEl.classList.remove("active");
+    subtitleEl.classList.remove("active");
+
+    setTimeout(() => {
+        titleEl.innerText = pages[nextIndex].title;
+        subtitleEl.innerText = pages[nextIndex].subtitle;
+
+        titleEl.classList.add("active");
+        subtitleEl.classList.add("active");
+    }, 200);
+}
+
+function updateDots() {
+    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+}
+
+function go(i) {
+    index = i;
+    animateText(i);
+    updateDots();
+}
+
+function next() {
+    if (index < pages.length - 1) {
+        index++;
+        animateText(index);
         updateDots();
+    } else {
+        finish();
     }
+}
 
-    function next() {
-        if (index < pages.length - 1) {
-            index++;
-            animateText(index);
-            updateDots();
-        } else {
-            finish();
-        }
-    }
+function finish() {
+    Telegram.WebApp.sendData(JSON.stringify({ action: "finished" }));
+}
 
-    function finish() {
-        Telegram.WebApp.sendData(
-            JSON.stringify({ action: "finished" })
-        );
-    }
+document.body.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+document.body.addEventListener("touchend", e => {
+    let dx = e.changedTouches[0].clientX - startX;
+    if (dx < -50 && index < pages.length - 1) next();
+    if (dx > 50 && index > 0) { index--; go(index); }
+});
 
-    /* Свайпы */
-    let startX = 0;
-
-    document.body.addEventListener("touchstart", e => {
-        startX = e.touches[0].clientX;
-    });
-
-    document.body.addEventListener("touchend", e => {
-        let dx = e.changedTouches[0].clientX - startX;
-
-        if (dx < -50 && index < pages.length - 1) {
-            next();
-        }
-        if (dx > 50 && index > 0) {
-            index--;
-            go(index);
-        }
-    });
-
-    // Первое появление
-    animateText(0);
-    dots[0].classList.add("active");
-
+// Первое появление
+animateText(0);
+dots[0].classList.add("active");
 </script>
 
 </body>
