@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Telegram Mini App</h1>
+            <p id="greeting">Загрузка...</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 Информация о пользователе</h2>
+            <div id="userInfo" class="info-block">
+                <p><strong>Статус:</strong> <span id="status">Подключение...</span></p>
+                <p><strong>ID:</strong> <span id="userId">-</span></p>
+                <p><strong>Имя:</strong> <span id="userName">-</span></p>
+                <p><strong>Язык:</strong> <span id="userLanguage">-</span></p>
+                <p><strong>Тема:</strong> <span id="theme">-</span></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎮 Интерактивные элементы</h2>
+            <div class="button-group">
+                <button onclick="showAlert()">📢 Показать уведомление</button>
+                <button onclick="showConfirm()">❓ Подтверждение</button>
+                <button onclick="closeApp()">❌ Закрыть приложение</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💬 Отправить данные боту</h2>
+            <div class="form-group">
+                <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                <button onclick="sendData()">Отправить</button>
+            </div>
+            <div id="responseMessage" style="display:none;" class="response-message">
+                <p id="response"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Цвета темы</h2>
+            <div class="color-grid">
+                <div class="color-box" style="background-color: var(--tg-theme-bg-color);"></div>
+                <div class="color-box" style="background-color: var(--tg-theme-text-color);"></div>
+                <div class="color-box" style="background-color: var(--tg-theme-hint-color);"></div>
+                <div class="color-box" style="background-color: var(--tg-theme-link-color);"></div>
+                <div class="color-box" style="background-color: var(--tg-theme-button-color);"></div>
+                <div class="color-box" style="background-color: var(--tg-theme-button-text-color);"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Telegram Mini App • Версия 1.0</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
